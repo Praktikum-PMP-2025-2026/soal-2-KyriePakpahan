@@ -1,0 +1,164 @@
+name: Autograding Tests
+
+on:
+  - push
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Case 01 - contoh umum tiga saran
+        id: case-01
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 01 - contoh umum tiga saran
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "5 carrier carabiner campstove matras compass ca"
+          expected-output: "SUGGESTION campstove carabiner carrier"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 02 - tidak ada prefix cocok
+        id: case-02
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 02 - tidak ada prefix cocok
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "4 alpha beta gamma delta zz"
+          expected-output: "TIDAK ADA"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 03 - hanya satu cocok
+        id: case-03
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 03 - hanya satu cocok
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "4 sensor kabel adaptor casing se"
+          expected-output: "SUGGESTION sensor"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 04 - dua cocok
+        id: case-04
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 04 - dua cocok
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "5 atom atlas beta gamma delta at"
+          expected-output: "SUGGESTION atlas atom"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 05 - lebih dari tiga cocok ambil tiga pertama
+        id: case-05
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 05 - lebih dari tiga cocok ambil tiga pertama
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "6 cat car can cab camp cape ca"
+          expected-output: "SUGGESTION cab camp can"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 06 - prefix sama dengan nama lengkap
+        id: case-06
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 06 - prefix sama dengan nama lengkap
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "4 tool toolbox tooth tone tool"
+          expected-output: "SUGGESTION tool toolbox tooth"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 07 - N kurang dari 3 semua dicetak
+        id: case-07
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 07 - N kurang dari 3 semua dicetak
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "2 kabel kapur ka"
+          expected-output: "SUGGESTION kabel kapur"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 08 - data belum terurut
+        id: case-08
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 08 - data belum terurut
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "5 zebra alpha alpine beta algae al"
+          expected-output: "SUGGESTION algae alpha alpine"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 09 - semua cocok tetapi potong tiga
+        id: case-09
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 09 - semua cocok tetapi potong tiga
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "5 a aa aaa aaaa aaaaa a"
+          expected-output: "SUGGESTION a aa aaa"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Case 10 - prefix di tengah tidak dihitung
+        id: case-10
+        uses: classroom-resources/autograding-io-grader@v1
+        with:
+          test-name: Case 10 - prefix di tengah tidak dihitung
+          setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
+          command: ./soal2
+          input: "5 sensor tensi konsol pensil senang en"
+          expected-output: "TIDAK ADA"
+          comparison-method: exact
+          timeout: 2
+          max-score: 10
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          CASE-01_RESULTS: "${{steps.case-01.outputs.result}}"
+          CASE-02_RESULTS: "${{steps.case-02.outputs.result}}"
+          CASE-03_RESULTS: "${{steps.case-03.outputs.result}}"
+          CASE-04_RESULTS: "${{steps.case-04.outputs.result}}"
+          CASE-05_RESULTS: "${{steps.case-05.outputs.result}}"
+          CASE-06_RESULTS: "${{steps.case-06.outputs.result}}"
+          CASE-07_RESULTS: "${{steps.case-07.outputs.result}}"
+          CASE-08_RESULTS: "${{steps.case-08.outputs.result}}"
+          CASE-09_RESULTS: "${{steps.case-09.outputs.result}}"
+          CASE-10_RESULTS: "${{steps.case-10.outputs.result}}"
+        with:
+          runners: case-01,case-02,case-03,case-04,case-05,case-06,case-07,case-08,case-09,case-10
