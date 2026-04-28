@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAX_NAME_LEN 100
+
 
 /* Contoh Input
 N nama1 nama2 ... namaN prefix 
@@ -24,12 +26,21 @@ TIDAK ADA
 */
 
 
-/*Testcase
+/*
+Testcase
 5 carrier carabiner campstove matras compass ca 
+
+Output Testcase
+SUGGESTION campstove carabiner carrier 
 */
 
-/*Output Testcase
-SUGGESTION campstove carabiner carrier 
+
+/*
+Testcase
+4 alpha beta gamma delta zz
+
+Output Testcase
+TIDAK ADA
 */
 
 
@@ -66,26 +77,6 @@ void add_barang(Inventory *inv, const char *nama) {
 
 
 
-void print_suggestions(Inventory *inv, const char *prefix) {
-    int count = 0;
-    for (int i = 0; i < inv->size; i++) {
-        if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
-            if (count < 3) {
-                printf("%s ", inv->data[i].nama);
-                count++;
-            } else {
-                break;
-            }
-        }
-    }
-    if (count > 0) {
-        printf("\n");
-    } else {
-        printf("TIDAK ADA\n");
-    }
-}
-
-
 void free_inventory(Inventory *inv) {
     for (int i = 0; i < inv->size; i++) {
         free(inv->data[i].nama);
@@ -95,30 +86,51 @@ void free_inventory(Inventory *inv) {
     inv->capacity = 0;
 }
 
-int main() {
+int main () {
     Inventory inv;
     init_inventory(&inv);
 
     int N;
-    char prefix[100];
+    char prefix[MAX_NAME_LEN];
 
-    if (scanf("%d", &N) != 1) {
+    // baca input dari user
+    if (scanf("%d", &N) != 1){
         return 0;
     }
 
     for (int i = 0; i < N; i++) {
-        char nama[100];
-        if (scanf("%s", nama) != 1) {
+        char nama[MAX_NAME_LEN];
+        if (scanf("%s", nama) != 1){
+            free_inventory(&inv);
             return 0;
         }
         add_barang(&inv, nama);
     }
 
-    if (scanf("%s", prefix) != 1) {
+    if (scanf("%s", prefix) != 1){
+        free_inventory(&inv);
         return 0;
     }
 
-    print_suggestions(&inv, prefix);
+    int count = 0;
+    for (int i = 0; i < inv.size; i++) {
+        if (strncmp(inv.data[i].nama, prefix, strlen(prefix)) == 0) {
+            if (count < 3) {
+                if (count == 0) {
+                    printf("SUGGESTION");
+                }
+                printf(" %s", inv.data[i].nama);
+                count++;
+            } else {
+                break;
+            }
+        }
+    }
+    if (count == 0) {
+        printf("TIDAK ADA");
+    }
+    printf("\n");
+
     free_inventory(&inv);
     return 0;
 }
