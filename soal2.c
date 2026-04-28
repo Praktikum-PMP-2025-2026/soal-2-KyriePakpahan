@@ -4,7 +4,7 @@
  *   Nama (NIM)          : Kyrie Eleison Jacob Pakpahan (13224006)
  *   Nama File           : soal2.c
  *   Deskripsi           : Program yang mengimplementasikan dynamic array untuk menyimpan data barang, kemudian menampilkan 3 barang dari sesuai dengan prefix 
- *                          yang diinnputkan pengguna.
+ *                          yang diinput oleh pengguna.
 **/
 
 #include <stdio.h>
@@ -90,7 +90,8 @@ void print_suggestions(Inventory *inv, const char *prefix) {
 
     int count = 0;
     for (int i = 0; i < inv->size; i++) {
-        if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
+        // handle jika prefix sama dengan nama barang jangan ditampilkan
+        if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0 && strcmp(inv->data[i].nama, prefix) != 0) {
             if (count < 3) {
                 if (count == 0) {
                     printf("SUGGESTION");
