@@ -85,13 +85,12 @@ int compare_barang(const void *a, const void *b) {
     return strcmp(((Barang *)a)->nama, ((Barang *)b)->nama);
 }
 
-// jika awalan prefix masih sama dengan nama barang, maka tampilkan barang tersebut, maksimal 3 barang yang ditampilkan, jika tidak ada barang yang sesuai dengan prefix, tampilkan "TIDAK ADA"
+// fungsi untuk ngeprint suggestion barang berdasarkan prefix yang dimasukkan oleh pengguna, dengan maksimal 3 saran diurutkan sesuai alfabetis
 void print_suggestions(Inventory *inv, const char *prefix) {
     qsort(inv->data, inv->size, sizeof(Barang), compare_barang);
 
     int count = 0;
     for (int i = 0; i < inv->size; i++) {
-        // handle jika barang yang ditampilkan belum 3, maka bandingkan prefix dengan nama barang, jika ada kemiripam 
         if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
             if (count < 3) {
                 if (count == 0) {
@@ -110,24 +109,6 @@ void print_suggestions(Inventory *inv, const char *prefix) {
     printf("\n");
    
 }
-// int count = 0;
-//     for (int i = 0; i < inv.size; i++) {
-//         if (strncmp(inv.data[i].nama, prefix, strlen(prefix)) == 0) {
-//             if (count < 3) {
-//                 if (count == 0) {
-//                     printf("SUGGESTION");
-//                 }
-//                 printf(" %s", inv.data[i].nama);
-//                 count++;
-//             } else {
-//                 break;
-//             }
-//         }
-//     }
-//     if (count == 0) {
-//         printf("TIDAK ADA");
-//     }
-//     printf("\n");
 
 // fungsi untuk membebaskan memori yang dialokasikan untuk inventory
 void free_inventory(Inventory *inv) {
