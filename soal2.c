@@ -18,6 +18,7 @@ N nama1 nama2 ... namaN prefix
 /*Contoh Output
 Jika barang yang dicari ada
 SUGGESTION nama1 nama2 nama3 
+
 Jika barang yang dicari tidak ada
 TIDAK ADA 
 */
@@ -66,18 +67,22 @@ void add_barang(Inventory *inv, const char *nama) {
 
 
 void print_suggestions(Inventory *inv, const char *prefix) {
-    printf("SUGGESTION");
     int count = 0;
-    for (int i = 0; i < inv->size && count < 3; i++) {
+    for (int i = 0; i < inv->size; i++) {
         if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
-            printf(" %s", inv->data[i].nama);
-            count++;
+            if (count < 3) {
+                printf("%s ", inv->data[i].nama);
+                count++;
+            } else {
+                break;
+            }
         }
     }
-    if (count == 0) {
-        printf(" TIDAK ADA");
+    if (count > 0) {
+        printf("\n");
+    } else {
+        printf("TIDAK ADA\n");
     }
-    printf("\n");
 }
 
 
