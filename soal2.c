@@ -43,25 +43,27 @@ Output Testcase
 TIDAK ADA
 */
 
-
+// struktur data untuk menyimpan informasi barang
 typedef struct {
     char *nama;
 } Barang;
 
+// struktur data untuk menyimpan inventory barang dengan dynamic array
 typedef struct {
     Barang *data;
     int size;
     int capacity;
 } Inventory;
 
+// fungsi untuk menginisialisasi inventory dengan kapasitas awal
 void init_inventory(Inventory *inv) {
     inv->size = 0;
     inv->capacity = 2;
     inv->data = (Barang *)malloc(inv->capacity * sizeof(Barang));
 }
 
+// fungsi untuk menambahkan barang ke inventory, dengan resize jika kapasitas penuh
 void add_barang(Inventory *inv, const char *nama) {
-    // resize if full
     if (inv->size >= inv->capacity) {
         inv->capacity *= 2;
         Barang *temp = (Barang *)realloc(inv->data, inv->capacity * sizeof(Barang));
@@ -71,12 +73,12 @@ void add_barang(Inventory *inv, const char *nama) {
         }
         inv->data = temp;
     }
-    inv->data[inv->size].nama = strdup(nama);
+    inv->data[inv->size].nama = (char *)malloc(strlen(nama) + 1);
+    strcpy(inv->data[inv->size].nama, nama);
     inv->size++;
 }
 
-
-
+// fungsi untuk membebaskan memori yang dialokasikan untuk inventory
 void free_inventory(Inventory *inv) {
     for (int i = 0; i < inv->size; i++) {
         free(inv->data[i].nama);
