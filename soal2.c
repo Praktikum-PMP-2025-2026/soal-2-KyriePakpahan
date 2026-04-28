@@ -80,17 +80,18 @@ void add_barang(Inventory *inv, const char *nama) {
 
 
 // fungsi untuk mencetak saran barang berdasarkan prefix yang dimasukkan oleh pengguna, dengan maksimal 3 saran diurutkan sesuai alfabetis
-// menggunakan qsort untuk mengurutkan barang terlebih dahulu, kemudian mencari barang yang sesuai dengan prefix dan mencetak maksimal 3 saran
+// menggunakan qsort untuk mengurutkan barang terlebih dahulu, kemudian mencari barang yang sesuai dengan prefix
 int compare_barang(const void *a, const void *b) {
     return strcmp(((Barang *)a)->nama, ((Barang *)b)->nama);
 }
 
+// jika awalan prefix masih sama dengan nama barang, maka tampilkan barang tersebut, maksimal 3 barang yang ditampilkan, jika tidak ada barang yang sesuai dengan prefix, tampilkan "TIDAK ADA"
 void print_suggestions(Inventory *inv, const char *prefix) {
     qsort(inv->data, inv->size, sizeof(Barang), compare_barang);
 
     int count = 0;
     for (int i = 0; i < inv->size; i++) {
-        // handle jika prefix sama dengan nama barang jangan ditampilkan
+        // handle jika barang yang ditampilkan belum 3, maka bandingkan prefix dengan nama barang, jika ada kemiripam 
         if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
             if (count < 3) {
                 if (count == 0) {
@@ -137,6 +138,7 @@ void free_inventory(Inventory *inv) {
     inv->size = 0;
     inv->capacity = 0;
 }
+
 
 int main () {
     Inventory inv;
