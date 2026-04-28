@@ -78,6 +78,55 @@ void add_barang(Inventory *inv, const char *nama) {
     inv->size++;
 }
 
+
+// fungsi untuk mencetak saran barang berdasarkan prefix yang dimasukkan oleh pengguna, dengan maksimal 3 saran diurutkan sesuai alfabetis
+// menggunakan qsort untuk mengurutkan barang terlebih dahulu, kemudian mencari barang yang sesuai dengan prefix dan mencetak maksimal 3 saran
+int compare_barang(const void *a, const void *b) {
+    return strcmp(((Barang *)a)->nama, ((Barang *)b)->nama);
+}
+
+void print_suggestions(Inventory *inv, const char *prefix) {
+    qsort(inv->data, inv->size, sizeof(Barang), compare_barang);
+
+    int count = 0;
+    for (int i = 0; i < inv->size; i++) {
+        if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
+            if (count < 3) {
+                if (count == 0) {
+                    printf("SUGGESTION");
+                }
+                printf(" %s", inv->data[i].nama);
+                count++;
+            } else {
+                break;
+            }
+        }
+    }
+    if (count == 0) {
+        printf("TIDAK ADA");
+    }
+    printf("\n");
+   
+}
+// int count = 0;
+//     for (int i = 0; i < inv.size; i++) {
+//         if (strncmp(inv.data[i].nama, prefix, strlen(prefix)) == 0) {
+//             if (count < 3) {
+//                 if (count == 0) {
+//                     printf("SUGGESTION");
+//                 }
+//                 printf(" %s", inv.data[i].nama);
+//                 count++;
+//             } else {
+//                 break;
+//             }
+//         }
+//     }
+//     if (count == 0) {
+//         printf("TIDAK ADA");
+//     }
+//     printf("\n");
+
 // fungsi untuk membebaskan memori yang dialokasikan untuk inventory
 void free_inventory(Inventory *inv) {
     for (int i = 0; i < inv->size; i++) {
@@ -114,25 +163,8 @@ int main () {
         return 0;
     }
 
-    int count = 0;
-    for (int i = 0; i < inv.size; i++) {
-        if (strncmp(inv.data[i].nama, prefix, strlen(prefix)) == 0) {
-            if (count < 3) {
-                if (count == 0) {
-                    printf("SUGGESTION");
-                }
-                printf(" %s", inv.data[i].nama);
-                count++;
-            } else {
-                break;
-            }
-        }
-    }
-    if (count == 0) {
-        printf("TIDAK ADA");
-    }
-    printf("\n");
-
+    
+    print_suggestions(&inv, prefix);
     free_inventory(&inv);
     return 0;
 }
