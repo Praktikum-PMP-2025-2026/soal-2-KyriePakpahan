@@ -90,7 +90,7 @@ jobs:
           setup-command: gcc -std=c11 -O2 -Wall -Wextra -o soal2 soal2.c
           command: ./soal2
           input: "4 tool toolbox tooth tone tool"
-          expected-output: "SUGGESTION tool toolbox tooth"
+          expected-output: "SUGGESTION tool toolbox"
           comparison-method: exact
           timeout: 2
           max-score: 10
