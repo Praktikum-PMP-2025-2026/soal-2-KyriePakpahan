@@ -91,7 +91,7 @@ void print_suggestions(Inventory *inv, const char *prefix) {
     int count = 0;
     for (int i = 0; i < inv->size; i++) {
         // handle jika prefix sama dengan nama barang jangan ditampilkan
-        if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0 && strcmp(inv->data[i].nama, prefix) != 0) {
+        if (strncmp(inv->data[i].nama, prefix, strlen(prefix)) == 0) {
             if (count < 3) {
                 if (count == 0) {
                     printf("SUGGESTION");
